@@ -5,5 +5,5 @@
   "name": "CoinFlip Bot",
   "environment": "client",
   "entrypoints": { "client": ["com.example.coinflip.CoinFlipClient"] },
-  "depends": { "fabricloader": ">=0.16.0", "fabric-api": "*", "minecraft": "~1.21" }
+  "depends": { "fabricloader": ">=0.16.0", "fabric-api": "*", "minecraft": "~1.21.11" }
 }

@@ -9,6 +9,7 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
@@ -21,7 +22,7 @@ public class CoinFlipClient implements ClientModInitializer {
         "Coinflip! Pay me any amount with /pay and you have a 45% chance to get double back. Odds are 45%, play at your own risk.";
     static final int MSG_DELAY_TICKS = 20 * 8;
     static final double WIN_CHANCE = 0.45;
-    static final double MAX_BET = 1_000_000;
+    static final double MAX_BET = 100_000_000;
     static final Pattern PAID_PATTERN =
         Pattern.compile("^(\\w{3,16}) paid you \\$([\\d.,]+)\\s*([KkMmBb]?)");
     // ==================
@@ -35,7 +36,8 @@ public class CoinFlipClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.coinflipbot.toggle", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_J, "category.coinflipbot"));
+            "key.coinflipbot.toggle", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_J,
+            KeyBinding.Category.create(Identifier.of("coinflipbot", "main"))));
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
 
@@ -58,7 +60,7 @@ public class CoinFlipClient implements ClientModInitializer {
 
         String me = client.getSession().getUsername();
         for (PlayerListEntry entry : client.getNetworkHandler().getPlayerList()) {
-            String name = entry.getProfile().getName();
+            String name = entry.getProfile().name();
             if (name.equals(me) || messaged.contains(name)) continue;
             messaged.add(name);
             client.getNetworkHandler().sendChatCommand("msg " + name + " " + ADVERT);
